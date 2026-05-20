@@ -3,24 +3,24 @@
     "path": "~/replication_study/replication_script.R",
     "project_path": null,
     "type": "r_source",
-    "hash": "1691687999",
+    "hash": "0",
     "contents": "",
-    "dirty": false,
+    "dirty": true,
     "created": 1778099736152.0,
     "source_on_save": false,
     "relative_order": 1,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "96,0",
-        "scrollLine": "77"
+        "cursorPosition": "142,0",
+        "scrollLine": "127"
     },
     "folds": "",
     "lastKnownWriteTime": 1779158614,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1779158614596,
+    "last_content_update": 1779298210300,
     "read_only": false,
     "read_only_alternatives": []
 }
