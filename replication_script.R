@@ -100,4 +100,81 @@ ggplot() +
   labs(fill = "San Francisco Subgeographies") +
   theme_void()
                  
+#graphing median income
+median_income <- get_acs(
+  geography = "Tract",
+  state = "California",
+  variables = "B19013_001",
+  output = "wide",
+  year = 2020
+)
+
+sf_tracts <- sf_tracts %>%
+  left_join(median_income, by = "GEOID")
+
+ggplot(data = sf_tracts) +
+  geom_histogram(aes(x = med_incomeE), color = "darkmagenta", fill = "lightpink") +
+  labs(
+    title = "San Francisco Median Income by Census Tract", 
+    x = "Median Income (USD)",
+    y = "Count (Census Tracts)"
+  )
+  
+
+#mapping bachelors degree
+bachelors_degree <- get_acs(
+  geography = "Tract",
+  state = "California",
+  variables = "DP02_0068P",
+  year = 2020
+)
+
+sf_tracts <- sf_tracts %>%
+  left_join(bachelors_degree, by = "GEOID")
+
+
+ggplot(data = sf_tracts) +
+  geom_sf(aes(fill = estimate), color = "lightgray") +
+  scale_fill_gradient(low = "lightpink", high ="darkorchid4") +
+  labs(fill = "Percent of Population 25+ with a Bachelor's Degree or Higher") +
+  theme_void()
+
+# population pyramids
+sf_population <- get_estimates(
+  geography = "metropolitan statistical area/micropolitan statistical area",
+  state = "CA",
+  product = "characteristics",
+  breakdown = c("SEX", "AGEGROUP"),
+  breakdown_labels = TRUE,
+  year = 2020
+)%>%
+  filter(str_detect(NAME, "San Francisco"))
+
+
+sf_filtered <- filter(sf_population, str_detect(AGEGROUP, "Age"),
+                     SEX != "Both sexes") %>%
+  mutate(value = ifelse(SEX == "Male", -value, value))
+
+ggplot(sf_filtered, aes(x= value, y = AGEGROUP, fill = SEX)) +
+  geom_col()
+  
+
+  
+ggplot(sf_filtered,
+                     aes(x=value,
+                         y = AGEGROUP,
+                         fill = SEX)) +
+  geom_col(width=0.95, alpha = 0.75) +
+  theme_minimal(base_family = "Verdana",
+                base_size = 12) +
+  scale_x_continuous(
+    labels = ~ scales::label_number(scale=0.001, suffix = "k")(abs(.x))
+  ) +
+  scale_y_discrete(labels = ~str_remove_all(.x, "Age\\s|\\syears")) +
+  scale_fill_manual(values = c("darkseagreen", "orange"))+
+               labs(x = "",
+                    y = "2020 population estimate",
+                    title = "San Francisco Population Structure",
+                    fill = "")
+
 
